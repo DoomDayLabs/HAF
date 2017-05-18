@@ -71,18 +71,22 @@ public class ProtocolHandler {
 	private String defineTrigger(StringTokenizer st) {
 		String name = st.nextToken();
 		Trigger t = new Trigger(name);
+		try{
+			while (st.hasMoreTokens()){
+				switch(st.nextToken()){
+				case "STR":addStrToTrigger(t,st);break;
+				case "INT":addIntToTrigger(t,st);break;
+				case "FLOAT":addFloatToTrigger(t,st);break;			
+				case "VAL":addValToTrigger(t,st);break;
+				case "FLAG":addFlatToTrigger(t,st);break;			
+				}
+			
+			}			
+			endpoint.addTrigger(t);
+		} catch (NoSuchElementException e){
+			
+		}
 		
-		while (st.hasMoreTokens()){
-			switch(st.nextToken()){
-			case "INT":addIntToTrigger(t,st);break;
-			case "FLOAT":addFloatToTrigger(t,st);break;
-			case "VAL":addValToTrigger(t,st);break;
-			case "FLAG":addFlatToTrigger(t,st);break;
-			case "STR":addStrToTrigger(t,st);break;
-			}
-		
-		}		
-		endpoint.addTrigger(t);
 		return "OK";
 	}
 
@@ -110,12 +114,10 @@ public class ProtocolHandler {
 		
 	}
 
-	private void addIntToTrigger(Trigger t, StringTokenizer st) {
+	private void addIntToTrigger(Trigger t, StringTokenizer st) {		
 		String minVal = st.nextToken();
 		String maxVal = st.nextToken();
 		t.addParam(new Trigger.IntParam(Integer.valueOf(minVal),Integer.valueOf(maxVal)));
-		
-		
 	}
 
 	private String defineSensor(StringTokenizer st) {
@@ -181,6 +183,37 @@ public class ProtocolHandler {
 		FloatSensor s = new FloatSensor(name,min,max);
 		endpoint.addSensor(s);
 		
+	}
+
+	public boolean validateSend(String input) {
+		StringTokenizer st = new StringTokenizer(input, " ");
+		String cmd = st.nextToken();
+		switch(cmd){
+		case "CONNECT":
+			if (!State.STORED.equals(endpoint.getState())) throw new IllegalStateException();
+			return validateAuth(st);			
+		case "CALL":
+			if (!State.ARMED.equals(endpoint.getState())) throw new IllegalStateException();
+			return validateCall(st);
+		}
+		
+		
+		return false;		
+	}
+
+	private boolean validateCall(StringTokenizer st) {
+		String triggerName = st.nextToken();
+		Trigger t = endpoint.getTrigger(triggerName);
+		try{
+			return t!=null&&t.params().allMatch(param->param.validate(st.nextToken()))&&!st.hasMoreTokens();
+		} catch (NoSuchElementException e){
+			return false;
+		}
+	}
+
+	private boolean validateAuth(StringTokenizer st) {
+		String pin = st.nextToken();
+		return pin!=null&&!pin.isEmpty();
 	}
 
 	
