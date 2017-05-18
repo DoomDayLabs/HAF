@@ -29,5 +29,8 @@ HAF PROTOCOL
  ARMED: CALL
  
  
+ ---- MCAST ----
+ CLASS SERIAL NAME
+ 
  
  
