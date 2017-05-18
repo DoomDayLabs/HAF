@@ -1,4 +1,4 @@
-package com.doomsdaylabs.haf.remote.beans;
+package com.doomsdaylabs.lrf.remote.beans;
 
 import java.util.ArrayList;
 import java.util.Arrays;

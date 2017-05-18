@@ -1,19 +1,26 @@
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import com.doomsdaylabs.haf.remote.ProtocolHandler;
-import com.doomsdaylabs.haf.remote.beans.Endpoint;
-import com.doomsdaylabs.haf.remote.beans.Trigger;
-import com.doomsdaylabs.haf.remote.beans.Trigger.FlagParam;
-import com.doomsdaylabs.haf.remote.beans.Trigger.FloatParam;
-import com.doomsdaylabs.haf.remote.beans.Trigger.IntParam;
-import com.doomsdaylabs.haf.remote.beans.Trigger.ValParam;
+import com.doomsdaylabs.lrf.remote.ProtocolHandler;
+import com.doomsdaylabs.lrf.remote.beans.Endpoint;
+import com.doomsdaylabs.lrf.remote.beans.Trigger;
+import com.doomsdaylabs.lrf.remote.beans.Endpoint.State;
+import com.doomsdaylabs.lrf.remote.beans.Trigger.FlagParam;
+import com.doomsdaylabs.lrf.remote.beans.Trigger.FloatParam;
+import com.doomsdaylabs.lrf.remote.beans.Trigger.IntParam;
+import com.doomsdaylabs.lrf.remote.beans.Trigger.ValParam;
 
 
 public class ProtocolDefineTriggerTest {
 	Endpoint ep = new Endpoint("","","");
 	ProtocolHandler proto = new ProtocolHandler(ep);
+	
+	@Before
+	public void init(){
+		ep.setState(State.CONNECTED);
+	}
 	
 	@Test
 	public void noParamTrigger(){

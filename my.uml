@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_Hl650DvFEeetWd4NluTZig" name="NewModel">
+  <packagedElement xmi:type="uml:StateMachine" xmi:id="_qLveUDvFEeetWd4NluTZig" name="NewModel">
+    <region xmi:id="_rfj2oDvFEeetWd4NluTZig" name="Region1">
+      <transition xmi:id="_SBc5ADvPEeetWd4NluTZig" source="_tDaPADvFEeetWd4NluTZig"/>
+      <transition xmi:id="_akXVQDvPEeetWd4NluTZig" name="STORE" source="_tDaPADvFEeetWd4NluTZig" target="_WmE6wDvPEeetWd4NluTZig"/>
+      <transition xmi:id="_flHSUDvPEeetWd4NluTZig" source="_WmE6wDvPEeetWd4NluTZig"/>
+      <transition xmi:id="_XD9UIDvQEeetWd4NluTZig" source="_WmE6wDvPEeetWd4NluTZig" target="_OMZdkDvQEeetWd4NluTZig"/>
+      <transition xmi:id="_ZpYeQDvQEeetWd4NluTZig" target="_tDaPADvFEeetWd4NluTZig"/>
+      <transition xmi:id="_PF4YYDvSEeetWd4NluTZig" source="_OMZdkDvQEeetWd4NluTZig" target="_WmE6wDvPEeetWd4NluTZig"/>
+      <transition xmi:id="_P-y9YDvSEeetWd4NluTZig" source="_OMZdkDvQEeetWd4NluTZig" target="_T7dSIDvQEeetWd4NluTZig"/>
+      <transition xmi:id="_RM69YDvSEeetWd4NluTZig" source="_T7dSIDvQEeetWd4NluTZig" target="_WmE6wDvPEeetWd4NluTZig"/>
+      <transition xmi:id="_TuwA8DvSEeetWd4NluTZig" source="_WmE6wDvPEeetWd4NluTZig" target="_SUfCYDvSEeetWd4NluTZig"/>
+      <transition xmi:id="_VKAeADvSEeetWd4NluTZig" source="_UYoEYDvSEeetWd4NluTZig" target="_tDaPADvFEeetWd4NluTZig"/>
+      <subvertex xmi:type="uml:State" xmi:id="_tDaPADvFEeetWd4NluTZig" name="DISCOVERED">
+        <region xmi:id="_zotIADvFEeetWd4NluTZig" name="Region1"/>
+      </subvertex>
+      <subvertex xmi:type="uml:State" xmi:id="_WmE6wDvPEeetWd4NluTZig" name="STORED"/>
+      <subvertex xmi:type="uml:State" xmi:id="_OMZdkDvQEeetWd4NluTZig" name="CONNECTED"/>
+      <subvertex xmi:type="uml:State" xmi:id="_T7dSIDvQEeetWd4NluTZig" name="ARMED"/>
+      <subvertex xmi:type="uml:FinalState" xmi:id="_SUfCYDvSEeetWd4NluTZig" name="Final1"/>
+      <subvertex xmi:type="uml:Pseudostate" xmi:id="_UYoEYDvSEeetWd4NluTZig" name="Initial1"/>
+    </region>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Activity" xmi:id="_DCAowDvQEeetWd4NluTZig" name="NewModel" node="_ImN4MDvQEeetWd4NluTZig _Kl7tMDvQEeetWd4NluTZig">
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_ImN4MDvQEeetWd4NluTZig" name="ActivityFinal1"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_Kl7tMDvQEeetWd4NluTZig" name="OpaqueAction1">
+      <body>// TODO body of OpaqueAction1</body>
+    </node>
+  </packagedElement>
+</uml:Model>

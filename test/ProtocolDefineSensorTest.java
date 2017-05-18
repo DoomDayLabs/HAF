@@ -2,18 +2,26 @@
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 
-import com.doomsdaylabs.haf.remote.ProtocolHandler;
-import com.doomsdaylabs.haf.remote.beans.Endpoint;
-import com.doomsdaylabs.haf.remote.beans.FlagSensor;
-import com.doomsdaylabs.haf.remote.beans.FloatSensor;
-import com.doomsdaylabs.haf.remote.beans.IntSensor;
-import com.doomsdaylabs.haf.remote.beans.StrSensor;
-import com.doomsdaylabs.haf.remote.beans.ValSensor;
+import com.doomsdaylabs.lrf.remote.ProtocolHandler;
+import com.doomsdaylabs.lrf.remote.beans.Endpoint;
+import com.doomsdaylabs.lrf.remote.beans.FlagSensor;
+import com.doomsdaylabs.lrf.remote.beans.FloatSensor;
+import com.doomsdaylabs.lrf.remote.beans.IntSensor;
+import com.doomsdaylabs.lrf.remote.beans.StrSensor;
+import com.doomsdaylabs.lrf.remote.beans.ValSensor;
+import com.doomsdaylabs.lrf.remote.beans.Endpoint.State;
 
 public class ProtocolDefineSensorTest {
 	Endpoint ep = new Endpoint("","","");
 	ProtocolHandler proto = new ProtocolHandler(ep);
+	
+	@Before
+	public void init(){
+		ep.setState(State.CONNECTED);
+	}
+	
 	@Test
 	public void defineIntTriggerTest(){		
 		proto.processLine("SENSOR INT TEMPERATURE 0 100");

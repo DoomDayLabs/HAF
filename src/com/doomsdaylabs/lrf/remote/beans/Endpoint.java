@@ -1,4 +1,4 @@
-package com.doomsdaylabs.haf.remote.beans;
+package com.doomsdaylabs.lrf.remote.beans;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,10 +6,9 @@ import java.util.Map;
 public class Endpoint {
 	public static enum State {
 		DISCOVERED,
-		ACCEPTED,
-		PREPARED,
-		ACTIVE,
-		INACTIVE		
+		STORED,
+		CONNECTED,
+		ARMED		
 	}
 	private State state;
 	private String localAddr;
@@ -21,6 +20,7 @@ public class Endpoint {
 		this.localAddr = locaAddr;
 		this.name = name;
 		this.serial = serial;
+		this.state = State.DISCOVERED;
 	}	
 	
 	private Map<String,Sensor> sensors = new HashMap<String, Sensor>();

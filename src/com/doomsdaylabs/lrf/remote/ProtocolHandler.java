@@ -1,15 +1,17 @@
-package com.doomsdaylabs.haf.remote;
+package com.doomsdaylabs.lrf.remote;
 
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import com.doomsdaylabs.haf.remote.beans.Endpoint;
-import com.doomsdaylabs.haf.remote.beans.FlagSensor;
-import com.doomsdaylabs.haf.remote.beans.FloatSensor;
-import com.doomsdaylabs.haf.remote.beans.IntSensor;
-import com.doomsdaylabs.haf.remote.beans.StrSensor;
-import com.doomsdaylabs.haf.remote.beans.Trigger;
-import com.doomsdaylabs.haf.remote.beans.ValSensor;
+import com.doomsdaylabs.lrf.remote.beans.Endpoint;
+import com.doomsdaylabs.lrf.remote.beans.FlagSensor;
+import com.doomsdaylabs.lrf.remote.beans.FloatSensor;
+import com.doomsdaylabs.lrf.remote.beans.IntSensor;
+import com.doomsdaylabs.lrf.remote.beans.Sensor;
+import com.doomsdaylabs.lrf.remote.beans.StrSensor;
+import com.doomsdaylabs.lrf.remote.beans.Trigger;
+import com.doomsdaylabs.lrf.remote.beans.ValSensor;
+import com.doomsdaylabs.lrf.remote.beans.Endpoint.State;
 
 public class ProtocolHandler {
 	private final Endpoint endpoint;
@@ -27,13 +29,43 @@ public class ProtocolHandler {
 		StringTokenizer st = new StringTokenizer(line, " ");
 		switch (st.nextToken()) {
 		case "SENSOR":
+			if (!endpoint.getState().equals(State.CONNECTED)) throw new IllegalStateException();
 			return defineSensor(st);
 		case "TRIGGER":
-			return defineTrigger(st);		
+			if (!endpoint.getState().equals(State.CONNECTED)) throw new IllegalStateException();
+			return defineTrigger(st);
+		case "ACCEPT":
+			if (!endpoint.getState().equals(State.STORED)) throw new IllegalStateException();
+			return acceptEndpoint(st);
+		case "READY":
+			if (!endpoint.getState().equals(State.CONNECTED)) throw new IllegalStateException();
+			return armEndpoint(st);
+		case "SET":
+			if (!endpoint.getState().equals(State.ARMED)) throw new IllegalStateException();
+			return setSensor(st);
 		}
 		
-		return "ERROR";
-		
+		return "ERROR";		
+	}
+
+	private String setSensor(StringTokenizer st) {
+		String sensorName = st.nextToken();
+		String value = st.nextToken();
+		Sensor s = endpoint.getSensor(sensorName);
+		if (s!=null){
+			s.set(value);
+		}
+		return null;
+	}
+
+	private String armEndpoint(StringTokenizer st) {
+		endpoint.setState(Endpoint.State.ARMED);
+		return null;
+	}
+
+	private String acceptEndpoint(StringTokenizer st) {
+		endpoint.setState(Endpoint.State.CONNECTED);
+		return null;
 	}
 
 	private String defineTrigger(StringTokenizer st) {

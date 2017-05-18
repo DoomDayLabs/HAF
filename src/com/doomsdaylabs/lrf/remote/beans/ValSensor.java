@@ -1,4 +1,4 @@
-package com.doomsdaylabs.haf.remote.beans;
+package com.doomsdaylabs.lrf.remote.beans;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -16,5 +16,21 @@ public class ValSensor extends Sensor {
 	}
 	String value;
 	public final Set<String> options;
+	
+	@Override
+	public Object get() {
+		return value;
+	}
+
+	@Override
+	public boolean set(String value) {
+		if (options.contains(value)){
+			this.value = value;
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
 
 }
