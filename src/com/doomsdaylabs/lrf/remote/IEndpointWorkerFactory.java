@@ -2,8 +2,8 @@ package com.doomsdaylabs.lrf.remote;
 
 import com.doomsdaylabs.lrf.remote.beans.Endpoint;
 
-public interface EndpointWorkerFactory {
+public interface IEndpointWorkerFactory {
 
-	EndpointWorker buildWorker(Endpoint endpoint);
+	IEndpointWorker buildWorker(Endpoint endpoint);
 
 }

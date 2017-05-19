@@ -1,5 +1,5 @@
 package com.doomsdaylabs.lrf.remote;
 
-public interface EndpointWorker {
+public interface IEndpointWorker {
 
 }
