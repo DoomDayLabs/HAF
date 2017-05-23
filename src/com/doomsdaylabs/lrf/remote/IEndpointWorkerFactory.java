@@ -4,6 +4,6 @@ import com.doomsdaylabs.lrf.remote.beans.Endpoint;
 
 public interface IEndpointWorkerFactory {
 
-	IEndpointWorker buildWorker(Endpoint endpoint);
+	IEndpointWorker buildWorker(Endpoint endpoint, INetworkWorker networkWorker);
 
 }

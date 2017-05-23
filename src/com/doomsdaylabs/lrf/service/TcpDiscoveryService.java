@@ -12,11 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import com.doomsdaylabs.lrf.remote.IEndpointWorker;
 import com.doomsdaylabs.lrf.remote.IEndpointWorkerFactory;
+import com.doomsdaylabs.lrf.remote.INetworkWorker;
+import com.doomsdaylabs.lrf.remote.TcpNetworkWorker;
 import com.doomsdaylabs.lrf.remote.beans.Endpoint;
 
 @Component
-public class DiscoveryService implements Runnable, IDiscoveryService{
+public class TcpDiscoveryService implements Runnable, IDiscoveryService{
 	
 	@Autowired
 	@Qualifier("discover.mcastgroup")
@@ -72,7 +75,9 @@ public class DiscoveryService implements Runnable, IDiscoveryService{
 		endpointRepository.appendEndpoint(endpoint);
 		
 		if (Endpoint.State.STORED.equals(endpoint.getState())){
-			endpointWorkerFactory.buildWorker(endpoint);
+			INetworkWorker networkWorker = new TcpNetworkWorker(endpoint.getLocalAddr());
+			IEndpointWorker endpointWorker = endpointWorkerFactory.buildWorker(endpoint,networkWorker);
+			endpointWorker.start();
 		}
 		
 	}

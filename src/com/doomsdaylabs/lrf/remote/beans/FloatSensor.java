@@ -31,5 +31,16 @@ public class FloatSensor extends Sensor{
 		}
 		
 	}
+	
+	@Override
+	public String asString() {
+		StringBuilder sb = new StringBuilder("FLOAT ");
+		sb.append(getName());
+		sb.append(" ");
+		sb.append(min);
+		sb.append(" ");
+		sb.append(max);
+		return sb.toString();
+	}
 
 }

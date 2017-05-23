@@ -15,5 +15,7 @@ public abstract class Sensor {
 	public abstract Object get();
 
 	public abstract boolean set(String value);
+	
+	public abstract String asString();
 
 }

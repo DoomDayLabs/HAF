@@ -32,5 +32,14 @@ public class ValSensor extends Sensor {
 		}
 		
 	}
+	
+	@Override
+	public String asString() {
+		StringBuilder sb= new StringBuilder("FLAG ");
+		sb.append(getName());
+		sb.append(" ");
+		sb.append(String.join(",", options));
+		return sb.toString();				
+	}
 
 }

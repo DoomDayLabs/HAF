@@ -12,6 +12,7 @@ public class Trigger {
 	public static abstract class Param {
 		
 		public abstract boolean validate(String param);
+		public abstract String asString();
 
 	}
 	
@@ -21,6 +22,12 @@ public class Trigger {
 		public boolean validate(String param) {
 			return true;
 		}
+		
+		@Override
+		public String asString() {
+			return "STR";
+		}
+	
 
 
 		
@@ -42,6 +49,11 @@ public class Trigger {
 				return false;
 			}
 		}		
+		
+		@Override
+		public String asString() {
+			return "INT "+min+" "+max;
+		}
 	}
 	
 	public static class FloatParam extends Param{
@@ -59,7 +71,11 @@ public class Trigger {
 			} catch (NumberFormatException e) {
 				return false;
 			}
-		}		
+		}	
+		@Override
+		public String asString() {
+			return "FLOAT "+min+" "+max;
+		}
 	}
 	
 	public static class ValParam extends Param{
@@ -70,6 +86,11 @@ public class Trigger {
 		@Override
 		public boolean validate(String param) {			
 			return options.contains(param);
+		}
+		
+		@Override
+		public String asString() {
+			return "VAL "+String.join(",", options);
 		}
 	}
 	
@@ -83,6 +104,10 @@ public class Trigger {
 			String[] flags = param.split(",");
 			return Stream.of(flags).allMatch(options::contains);
 		}
+		@Override
+		public String asString() {
+			return "FLAG "+String.join(",", options);
+		}
 	}
 
 	
@@ -91,6 +116,10 @@ public class Trigger {
 	private List<Param> params = new ArrayList<>();
 	public Trigger(String name) {
 		this.name = name;
+	}
+	public Trigger(String name, Param[] params){
+		this.name = name;
+		Stream.of(params).forEach(this::addParam);	
 	}
 	
 	public Trigger.Param getParam(int i) {
@@ -103,6 +132,13 @@ public class Trigger {
 	
 	public Stream<Param> params(){
 		return params.stream();
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder(this.name);		
+		params.stream().map(p->" "+p.asString()).forEach(sb::append);		
+		return sb.toString();
 	}
 
 }

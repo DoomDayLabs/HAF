@@ -25,7 +25,7 @@ public class ProtocolHandler {
 		return endpoint;
 	}
 	
-	public String processLine(String line){
+	public String processLine(String line) throws IllegalStateException{
 		StringTokenizer st = new StringTokenizer(line, " ");
 		switch (st.nextToken()) {
 		case "SENSOR":
@@ -216,8 +216,5 @@ public class ProtocolHandler {
 		return pin!=null&&!pin.isEmpty();
 	}
 
-	
-	
-	
 	
 }

@@ -17,5 +17,11 @@ public class StrSensor extends Sensor {
 		this.value = value;
 		return true;
 	}
+	
+	@Override
+	public String asString() {
+		return "STR "+getName();		
+	}
+	
 
 }

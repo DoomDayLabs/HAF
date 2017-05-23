@@ -6,4 +6,6 @@ public interface IEndpointRepository {
 
 	void appendEndpoint(Endpoint endpoint);
 
+	Endpoint get(String id);
+
 }

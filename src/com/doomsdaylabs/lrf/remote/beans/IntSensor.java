@@ -32,5 +32,24 @@ public class IntSensor extends Sensor{
 			return false;
 		}
 	}
+	
+	@Override
+	public String asString() {
+		StringBuilder sb = new StringBuilder("INT ");
+		sb.append(getName());
+		sb.append(" ");
+		sb.append(min);
+		sb.append(" ");
+		sb.append(max);
+		return sb.toString();
+	}
+
+	public Integer getMin() {
+		return min;
+	}
+
+	public Integer getMax() {
+		return max;
+	}
 
 }

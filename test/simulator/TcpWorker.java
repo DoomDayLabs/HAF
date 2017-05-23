@@ -1,4 +1,4 @@
-package scriptdevice;
+package simulator;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -27,6 +27,7 @@ public class TcpWorker implements Runnable{
 	private SelectionKey discoveryKey = null;
 	private DatagramChannel discoveryChannel = null;
 	private SocketAddress discoveryAddress;	
+	private SelectionKey serverKey;
 	boolean canSendDiscovery = false;
 	
 	
@@ -58,34 +59,24 @@ public class TcpWorker implements Runnable{
 		ServerSocketChannel ssc = ServerSocketChannel.open();
 		ssc.configureBlocking(false);
 		ssc.socket().bind(new InetSocketAddress("localhost", 27015));
-		ssc.register(selector, ssc.validOps());
+		serverKey = ssc.register(selector, ssc.validOps());
 							
 		discoveryChannel = DatagramChannel.open();
 		discoveryChannel.configureBlocking(false);
-		//discoveryChannel.socket().bind(new InetSocketAddress(27015));
 		discoveryKey = discoveryChannel.register(selector, SelectionKey.OP_WRITE);
 		Timer t = new Timer();
 		t.schedule(new TimerTask() {			
 			@Override
 			public void run() {
-				//System.out.println("Timer");
-				canSendDiscovery = true;
-//				discoveryKey.interestOps(discoveryKey.interestOps()|SelectionKey.OP_WRITE);
-//				if ((discoveryKey.interestOps()|SelectionKey.OP_WRITE)>0){
-//					System.out.println("Writable");
-//				}
+				if (connectionKey==null)
+					canSendDiscovery = true;
+
 				
 			}
 		}, 1000L, 1000L);
 		
 		
-				
-//		byte[] discoveryStringBytes = (endpointClass+" "+endpointSerial+" "+endpointName).getBytes();
-//		System.out.println("Discover packet = "+new String(discoveryStringBytes));
-//		discoveryMessage = ByteBuffer.allocate(discoveryStringBytes.length);
-//		discoveryMessage.put(discoveryStringBytes);	
-//		discoveryMessage.flip();
-						
+			
 		while(selector.select()>-1){
 			Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();			
 			while(iterator.hasNext()){
@@ -117,7 +108,7 @@ public class TcpWorker implements Runnable{
 	}
 
 	private void writeDiscovery(SelectionKey key) throws IOException {
-		System.out.println("Send discovery packet");
+		System.out.println("SIM: Send discovery packet");
 		canSendDiscovery = false;
 		
 		byte[] discoveryStringBytes = (endpointClass+" "+endpointSerial+" "+endpointName).getBytes();
@@ -138,7 +129,7 @@ public class TcpWorker implements Runnable{
 		if (writeQueue.size()>0){
 			
 			String str = writeQueue.poll()+"\r\n";
-			System.out.println("Writing "+str+"...");
+			System.out.println("SIM: Writing "+str);
 			byte[] b = str.getBytes();
 			ByteBuffer buff = ByteBuffer.allocate(b.length);
 			buff.clear();
@@ -152,6 +143,7 @@ public class TcpWorker implements Runnable{
 
 
 	private void read(SelectionKey key) throws IOException {	
+		System.out.println("READ MSG");
 		SocketChannel sc = (SocketChannel)key.channel();
 		ByteBuffer buf = ByteBuffer.allocate(4096);
 		int readed = sc.read(buf);
@@ -161,19 +153,19 @@ public class TcpWorker implements Runnable{
 			String msg = new String(buf.array()).trim();
 			String[] lines = msg.split("\r\n");
 			Stream.of(lines).forEach(System.out::println);
-			readQueue.add(msg);			
+			Stream.of(lines).forEach(readQueue::add);			
 		}
 	}
 
 
 	private void accept(SelectionKey key) throws IOException {
 		if (connectionKey==null){
-			System.out.println("Accept");
+			System.out.println("SIM: Accept connection");
 			SocketChannel socketChannel = ((ServerSocketChannel)key.channel()).accept();
 			socketChannel.configureBlocking(false);
 			connectionKey = socketChannel.register(key.selector(), SelectionKey.OP_READ|SelectionKey.OP_WRITE);
 		} else {
-			System.out.println("Deny");
+			System.out.println("SIM: Deny connection");
 			((ServerSocketChannel)key.channel()).accept().close();
 		}
 	}
@@ -194,11 +186,48 @@ public class TcpWorker implements Runnable{
 		if (readQueue.size()>0){
 			return readQueue.poll();
 		} 
-		return null;
+		return null;		
+	}
+
+	Thread t;
+	public void start(){
+		t = new Thread(this);
+		t.start();
+	}
+	public void stop(){
+		try {
+			serverKey.channel().close();			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (connectionKey!=null){
+			try {
+				close(connectionKey);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (t!=null){
+			t.interrupt();
+		}
+	}
+
+	public void resetConnection() {
+		if (connectionKey!=null){
+			try {
+				close(connectionKey);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 	}
 
-	
-	
-	
+	public boolean isConnected() {		
+		return connectionKey!=null;
+	}
+			
 }

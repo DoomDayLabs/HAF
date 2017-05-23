@@ -15,6 +15,7 @@ public class Endpoint {
 	private String endpointClass;
 	private String serial;
 	private String name;
+	private String pinCode;
 	
 	public Endpoint(String locaAddr,String name, String serial) {
 		this.localAddr = locaAddr;
@@ -68,6 +69,20 @@ public class Endpoint {
 	public void setState(State state) {
 		this.state = state;
 	}
+
+	public String getPinCode() {
+		return pinCode;
+	}
+
+	public void setPinCode(String pinCode) {
+		this.pinCode = pinCode;
+	}
+
+	public Map<String, Trigger> getTiggers() {
+		return triggers;
+	}
+	
+	
 	
 	
 }
