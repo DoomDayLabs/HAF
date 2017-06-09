@@ -1,5 +1,7 @@
 package com.doomsdaylabs.lrf.remote;
 
+import java.util.concurrent.TimeUnit;
+
 import com.doomsdaylabs.lrf.remote.beans.Endpoint;
 
 public class EndpointWorker implements IEndpointWorker,Runnable{
@@ -31,7 +33,12 @@ public class EndpointWorker implements IEndpointWorker,Runnable{
 	@Override
 	public void run() {
 		while(!networkWorker.isConnected()){
-			
+			try {
+				TimeUnit.MILLISECONDS.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		System.out.println("Auth");
@@ -47,6 +54,7 @@ public class EndpointWorker implements IEndpointWorker,Runnable{
 			e.printStackTrace();
 			networkWorker.stop();
 		}
+		
 		endpoint.setState(Endpoint.State.STORED);
 		
 	}

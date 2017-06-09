@@ -66,7 +66,7 @@ public class DiscoverServiceTest {
 		when(endpointFactory.buildEndpoint(anyString(), anyString(), anyString(), anyString()))
 		.thenReturn(Maker.make(()->{
 			Endpoint ep = new Endpoint("127.0.0.1", "TEST1", "0001");
-			ep.setState(Endpoint.State.STORED);
+			ep.setState(Endpoint.State.STORED);			
 			return ep;
 		}));
 		

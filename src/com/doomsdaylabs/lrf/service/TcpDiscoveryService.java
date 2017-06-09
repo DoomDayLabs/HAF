@@ -3,6 +3,7 @@ package com.doomsdaylabs.lrf.service;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
@@ -39,8 +40,10 @@ public class TcpDiscoveryService implements Runnable, IDiscoveryService{
 			InetAddress mcastAddr = InetAddress.getByName(mcastGroup);
 			
 			@SuppressWarnings("resource")
+			//
 			MulticastSocket mcastSock = new MulticastSocket(27015);
-			mcastSock.joinGroup(mcastAddr);		
+			//MulticastSocket mcastSock = new MulticastSocket(new InetSocketAddress("192.168.0.125", 27015));
+			mcastSock.joinGroup(mcastAddr);					
 			System.out.println("Discovery started");
 			while (true){
 				byte[] buff = new byte[1024];
@@ -64,14 +67,14 @@ public class TcpDiscoveryService implements Runnable, IDiscoveryService{
 		String localAddr = dp.getAddress().getHostAddress();		
 		String[] discoveryString = new String(dp.getData()).trim().split(" ");
 		System.out.println("Recieved "+new String(dp.getData())+" from "+localAddr);
-		if (discoveryString.length!=3){
+		if (discoveryString.length!=2){
 			return;
 		}
 		String endpointClass = discoveryString[0];
 		String endpointSerial = discoveryString[1];
-		String endpointName = discoveryString[2];
+		//String endpointName = discoveryString[2];
 		
-		Endpoint endpoint = endpointFactory.buildEndpoint(localAddr,endpointClass,endpointSerial,endpointName);
+		Endpoint endpoint = endpointFactory.buildEndpoint(localAddr,endpointClass,endpointSerial,"");
 		endpointRepository.appendEndpoint(endpoint);
 		
 		if (Endpoint.State.STORED.equals(endpoint.getState())){

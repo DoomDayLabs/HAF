@@ -68,6 +68,7 @@ public class TcpNetworkWorker implements INetworkWorker, Runnable{
 
 	
 	private void closeChan(SelectionKey key) throws IOException {
+		//System.out.println("Close chan");
 		connected = false;
 		SocketChannel chan = (SocketChannel) key.channel();
 		chan.socket().close();
@@ -81,7 +82,8 @@ public class TcpNetworkWorker implements INetworkWorker, Runnable{
 		int readed = chan.read(buf);
 		if (readed>0){
 			String payload = new String(buf.array());
-			Stream.of(payload.trim().split("\r\n"))
+			System.out.println(payload);
+			Stream.of(payload.trim().split("\n"))
 			.map(String::trim)
 			.forEach(readBuffer::add);			
 		} else {

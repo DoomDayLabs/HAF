@@ -26,6 +26,7 @@ public class ProtocolHandler {
 	}
 	
 	public String processLine(String line) throws IllegalStateException{
+		System.out.println("Process Line "+line);
 		StringTokenizer st = new StringTokenizer(line, " ");
 		switch (st.nextToken()) {
 		case "SENSOR":
@@ -121,13 +122,14 @@ public class ProtocolHandler {
 	}
 
 	private String defineSensor(StringTokenizer st) {
+		String name = st.nextToken();
 		try{
 			switch (st.nextToken()){
-				case "FLOAT":	defineSensorFloat(st);break;
-				case "INT":		defineSensorInt(st);break;
-				case "STR":		defineSensorStr(st);break;
-				case "VAL":		defineSensorVal(st);break;
-				case "FLAG":	defineSensorFlag(st);break;
+				case "FLOAT":	defineSensorFloat(name,st);break;
+				case "INT":		defineSensorInt(name, st);break;
+				case "STR":		defineSensorStr(name, st);break;
+				case "VAL":		defineSensorVal(name, st);break;
+				case "FLAG":	defineSensorFlag(name, st);break;
 				default:		return "ERROR";			
 			}
 			return "OK";
@@ -137,8 +139,8 @@ public class ProtocolHandler {
 		
 	}
 
-	private void defineSensorFlag(StringTokenizer st) {
-		String name = st.nextToken();
+	private void defineSensorFlag(String name, StringTokenizer st) {
+		
 		String flagList = st.nextToken();
 		String[] flags = flagList.split(",");
 		FlagSensor s = new FlagSensor(name,flags);
@@ -146,8 +148,8 @@ public class ProtocolHandler {
 		
 	}
 
-	private void defineSensorVal(StringTokenizer st) {
-		String name = st.nextToken();
+	private void defineSensorVal(String name, StringTokenizer st) {
+		
 		String optionsList = st.nextToken();
 		String[] options = optionsList.split(",");
 		ValSensor s = new ValSensor(name,options);
@@ -155,15 +157,15 @@ public class ProtocolHandler {
 		
 	}
 
-	private void defineSensorStr(StringTokenizer st) {
-		String name = st.nextToken();
+	private void defineSensorStr(String name, StringTokenizer st) {
+		
 		StrSensor s = new StrSensor(name);
 		endpoint.addSensor(s);
 		
 	}
 
-	private void defineSensorInt(StringTokenizer st) {
-		String name = st.nextToken();
+	private void defineSensorInt(String name, StringTokenizer st) {
+		
 		String valMin = st.nextToken();
 		String valMax = st.nextToken();
 		Integer min = Integer.valueOf(valMin);
@@ -173,8 +175,8 @@ public class ProtocolHandler {
 		
 	}
 
-	private void defineSensorFloat(StringTokenizer st) {
-		String name = st.nextToken();
+	private void defineSensorFloat(String name, StringTokenizer st) {
+		
 		String valMin = st.nextToken();
 		String valMax = st.nextToken();
 		Double min = Double.valueOf(valMin);

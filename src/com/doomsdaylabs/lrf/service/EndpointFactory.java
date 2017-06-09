@@ -18,7 +18,7 @@ public class EndpointFactory implements IEndpointFactory{
 		if (endpoint==null){
 			endpoint = new Endpoint(localAddr, endpointClass, endpointSerial);
 			endpoint.getState();
-			endpoint.setState(State.DISCOVERED);			
+			endpoint.setState(State.DISCOVERED);				
 		}
 		return endpoint;
 	}
